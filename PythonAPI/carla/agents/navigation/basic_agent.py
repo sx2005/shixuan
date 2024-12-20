@@ -381,19 +381,29 @@ class BasicAgent:
         if len(vehicle_list) == 0:
             return ObstacleDetectionResult(False, None, -1)
 
+        #根据条件来决定是否执行特定的代码
         if not max_distance:
+            #将self._base_vehicle_threshold的值赋给max_distance
             max_distance = self._base_vehicle_threshold
 
+        #获取车辆的变换信息并存储起来以便后续使用
         ego_transform = self._vehicle.get_transform()
+        #从ego_transform对象中获取location属性并将位置信息赋值给 ego_location
         ego_location = ego_transform.location
+        #将self._map.get_waypoint(ego_location)赋值给ego_wpt
         ego_wpt = self._map.get_waypoint(ego_location)
 
         # Get the right offset
+        #如果ego_wpt的lane_id小于0并且不等于1
         if ego_wpt.lane_id < 0 and lane_offset != 0:
+            #将lane_offset的值取反
             lane_offset *= -1
 
+        #获取ego前方的变换
         # Get the transform of the front of the ego
+        #ego_transform的值赋给ego_front_transform
         ego_front_transform = ego_transform
+        #ego_front_transform的location属性加上一个由carla.Location创建的位置
         ego_front_transform.location += carla.Location(
             self._vehicle.bounding_box.extent.x * ego_transform.get_forward_vector())
 
