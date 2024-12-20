@@ -116,26 +116,38 @@ class BasicAgent:
         The steering is kept the same to avoid going out of the lane when stopping during turns
 
             :param speed (carl.VehicleControl): control to be modified
+            #修改传入的control，使其执行紧急停止操作
         """
+        #设置油门为0
         control.throttle = 0.0
+        #设置刹车为最大刹车值
         control.brake = self._max_brake
+        #设置手刹为Flase
         control.hand_brake = False
+        #返回修改后的控制对象
         return control
 
     def set_target_speed(self, speed):
         """
         Changes the target speed of the agent
             :param speed (float): target speed in Km/h
+            #设置agent的目标速度
         """
+        #将speed赋值给_target_speed属性
         self._target_speed = speed
+        #调用planner的set_speed方法，并将speed传递给他
         self._local_planner.set_speed(speed)
 
+    #定义一个 follow_speed_limits函数，接收一个self和value的参数，value参数默认值为真
     def follow_speed_limits(self, value=True):
         """
+        #如果处于激活状态，agent将会根据速度限制动态地改变目标速度
         If active, the agent will dynamically change the target speed according to the speed limits
 
+            #value是否激活
             :param value (bool): whether or not to activate this behavior
         """
+        #调用follow_speed_limits方法，并传入value这个参数
         self._local_planner.follow_speed_limits(value)
 
     def get_local_planner(self):
